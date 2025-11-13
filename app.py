@@ -25,24 +25,20 @@ def predict():
         data = request.get_json()
 
         # --- Extract input values from JSON ---
-        ID = float(data.get("ID", 0))
         Age = float(data.get("Age", 0))
-        Experience = float(data.get("Experience", 0))
         Income = float(data.get("Income", 0))
-        ZIP_Code = float(data.get("ZIP_Code", 0))
         Family = int(data.get("Family", 1))
         CCAvg = float(data.get("CCAvg", 0))
         Education = int(data.get("Education", 1))
         Mortgage = float(data.get("Mortgage", 0))
-        Personal_Loan = int(data.get("Personal_Loan", False))
         Securities_Account = int(data.get("Securities_Account", False))
         CD_Account = int(data.get("CD_Account", False))
         Online = int(data.get("Online", False))
         CreditCard = int(data.get("CreditCard", False))
 
         features = np.array([[
-            ID, Age, Experience, Income, ZIP_Code, Family, CCAvg, Education,
-            Mortgage, Personal_Loan, Securities_Account, CD_Account, Online, CreditCard
+            Age, Income, Family, CCAvg, Education,
+            Mortgage, Securities_Account, CD_Account, Online, CreditCard
         ]])
 
         prediction = model.predict(scaler.transform(features))[0]
