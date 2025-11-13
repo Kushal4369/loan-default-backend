@@ -5,6 +5,9 @@ import numpy as np
 
 app = Flask(__name__)
 CORS(app)  # allow frontend (Next.js) to access backend
+scaler = joblib.load("scaler.pkl")
+model = joblib.load("loan_default_model.pkl")
+
 
 # ------------------------------
 # (Optional) Load your ML model
@@ -37,18 +40,12 @@ def predict():
         Online = int(data.get("Online", False))
         CreditCard = int(data.get("CreditCard", False))
 
-        # Example: Create a feature array for a model
         features = np.array([[
             ID, Age, Experience, Income, ZIP_Code, Family, CCAvg, Education,
             Mortgage, Personal_Loan, Securities_Account, CD_Account, Online, CreditCard
         ]])
 
-        # -------------------------
-        # Dummy logic for now
-        # Replace this with your model’s prediction, e.g.:
-        # prediction = model.predict(features)[0]
-        # -------------------------
-        prediction = bool(Income < 50 and Personal_Loan == 1)
+        prediction = model.predict(scaler.transform(features))[0]
 
         # Construct response
         result = {"default": prediction}
