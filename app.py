@@ -9,12 +9,6 @@ scaler = joblib.load("scaler.pkl")
 model = joblib.load("loan_default_model.pkl")
 
 
-# ------------------------------
-# (Optional) Load your ML model
-# Uncomment and replace with your real model file
-# model = joblib.load("model.pkl")
-# ------------------------------
-
 @app.route('/')
 def home():
     return jsonify({"message": "Flask ML API is running!"})
@@ -36,12 +30,12 @@ def predict():
         Online = int(data.get("Online", False))
         CreditCard = int(data.get("CreditCard", False))
 
-        features = np.array([[
-            Age, Income, Family, CCAvg, Education,
-            Mortgage, Securities_Account, CD_Account, Online, CreditCard
-        ]])
+        features = np.array([[Age, Income, Family, CCAvg, Education,
+                              Mortgage, Securities_Account,
+                              CD_Account, Online, CreditCard]])
 
-        prediction = model.predict(scaler.transform(features))[0]
+        prediction = model.predict(scaler.transform(features))
+        prediction = bool(prediction[0])  # Convert numpy type to native Python boolean  
 
         # Construct response
         result = {"default": prediction}
